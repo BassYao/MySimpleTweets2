@@ -1,6 +1,8 @@
 package com.codepath.apps.mysimpletweets;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -22,6 +24,9 @@ public class TimelineActivity extends ActionBarActivity {
     private ArrayList<Tweet> tweets;
     private TweetsArrayAdapter aTweets;
     private ListView lvTweets;
+    private SwipeRefreshLayout swipeContainer;
+
+    static final int ITEMS_PER_PAGE = 25;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,22 +34,63 @@ public class TimelineActivity extends ActionBarActivity {
         setContentView(R.layout.activity_timeline);
         client = TwitterApplication.getRestClient();
         setupViews();
-        populteTimeline();
+        populteTimeline(1, ITEMS_PER_PAGE);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.twitter)));
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+
     }
+
     private void setupViews() {
         lvTweets = (ListView) findViewById(R.id.lvTweets);
+
         tweets = new ArrayList<>();
         aTweets = new TweetsArrayAdapter(this, tweets);
         lvTweets.setAdapter(aTweets);
+        lvTweets.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to your AdapterView
+                populteTimeline((page - 1) * ITEMS_PER_PAGE + 1, ITEMS_PER_PAGE);
+                // or customLoadMoreDataFromApi(totalItemsCount);
+            }
+        });
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                populteTimeline(1, ITEMS_PER_PAGE);
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+
 
     }
-    private void populteTimeline() {
+    private void populteTimeline(int start, int count) {
+        if(start == 1) {
+            aTweets.clear();
+        }
         client.getHomeTimeline(new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
                 //Log.d("DEBUG",json.toString());
                 ArrayList<Tweet> tweets = Tweet.fromJSONArray(json);
                 aTweets.addAll(tweets);
+                swipeContainer.setRefreshing(false);
+
             }
 
             @Override
@@ -52,7 +98,7 @@ public class TimelineActivity extends ActionBarActivity {
 
                 Log.d("DEBUG",error.toString());
             }
-        });
+        },start ,count);
     }
 
     @Override
@@ -70,7 +116,7 @@ public class TimelineActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_new_tweet) {
             return true;
         }
 

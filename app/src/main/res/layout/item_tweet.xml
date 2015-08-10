@@ -10,23 +10,60 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:padding="10dp"
-        android:layout_marginRight="5dp" />
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:scaleType="fitXY"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="Bass"
         android:id="@+id/tvUserName"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/ivProfileImage"
-        android:layout_toEndOf="@+id/ivProfileImage" />
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:layout_marginRight="5dp"
+        android:textColor="@android:color/black"
+/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="\@BassYao"
+        android:id="@+id/tvName"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/tvUserName"
+        android:layout_toEndOf="@+id/tvUserName"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="12dp"
+
+        android:layout_alignBottom="@+id/tvUserName"
+        android:gravity="center_vertical"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1m"
+        android:id="@+id/tvCreatedTime"
+        android:gravity="right"
+        android:layout_marginRight="5dp"
+
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/tvName"
+        android:layout_toEndOf="@+id/tvName"
+        android:textColor="@android:color/secondary_text_dark" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="this is a tweet"
         android:id="@+id/tvBody"
         android:layout_toRightOf="@+id/ivProfileImage"
         android:layout_toEndOf="@+id/ivProfileImage"
-        android:layout_alignBottom="@+id/ivProfileImage" />
+        android:layout_below="@+id/tvUserName"
+        android:autoLink="all"
+        android:linksClickable="true"
+ />
+
+
 </RelativeLayout>
