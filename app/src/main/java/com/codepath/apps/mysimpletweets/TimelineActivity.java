@@ -2,6 +2,7 @@ package com.codepath.apps.mysimpletweets;
 
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -18,7 +20,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class TimelineActivity extends ActionBarActivity {
+public class TimelineActivity extends ActionBarActivity implements NewTweetFragment.OnFragmentInteractionListener{
 
     private TwitterClient client;
     private ArrayList<Tweet> tweets;
@@ -117,9 +119,32 @@ public class TimelineActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_new_tweet) {
+            client.getVerifyCredentials(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
+                    //Log.d("DEBUG",json.toString());
+                    User u = User.fromJSON(json);
+                    FragmentManager fm = getSupportFragmentManager();
+                    NewTweetFragment f = NewTweetFragment.newInstance(u);
+                    f.show(fm, "NEW_TWEET");
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject error) {
+
+                    Log.d("DEBUG", error.toString());
+                }
+            });
+
+
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onTweetPost(String body) {
+
     }
 }

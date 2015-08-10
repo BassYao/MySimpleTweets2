@@ -13,7 +13,7 @@
     <style name="AppTheme" parent="AppBaseTheme">
     </style>
     <style name="MyActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:background">#FF76AAEB</item>
+
     </style>
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
 
