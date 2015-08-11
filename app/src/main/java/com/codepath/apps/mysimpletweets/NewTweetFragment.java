@@ -79,8 +79,8 @@ public class NewTweetFragment extends DialogFragment {
         ImageView ivProfile  = (ImageView) v.findViewById(R.id.ivProfileImage);
         ImageButton ibBack = (ImageButton) v.findViewById(R.id.ibBack);
 
-        tvName.setText(String.format("@%s", mUser.getName()));
         tvUserName.setText(mUser.getScreenName());
+        tvName.setText(String.format("@%s", mUser.getName()));
         Picasso.with(getActivity()).load(mUser.getProfileImageUrl()).into(ivProfile);
 
         edtBody.addTextChangedListener(new TextWatcher() {

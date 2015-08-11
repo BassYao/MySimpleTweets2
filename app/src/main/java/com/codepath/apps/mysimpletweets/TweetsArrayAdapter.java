@@ -28,6 +28,10 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         TextView tvUserName;
         TextView tvName;
         TextView tvCreatedTime;
+        TextView tvRetweetBy;
+        TextView tvRetweet;
+        TextView tvReply;
+        TextView tvFavorite;
         ImageView ivProfile;
     }
 
@@ -43,16 +47,38 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             viewHolder.tvName   = (TextView)convertView.findViewById(R.id.tvName);
             viewHolder.tvCreatedTime = (TextView)convertView.findViewById(R.id.tvCreatedTime);
             viewHolder.ivProfile = (ImageView)convertView.findViewById(R.id.ivProfileImage);
+            viewHolder.tvRetweetBy = (TextView)convertView.findViewById(R.id.tvRetweetBy);
+            viewHolder.tvFavorite = (TextView)convertView.findViewById(R.id.tvFavorite);
+            viewHolder.tvReply = (TextView)convertView.findViewById(R.id.tvReply);
+            viewHolder.tvRetweet = (TextView)convertView.findViewById(R.id.tvRetweet);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder)convertView.getTag();
         }
-        viewHolder.tvUserName.setText(t.getUser().getScreenName());
-        viewHolder.tvName.setText(String.format("@%s", t.getUser().getName()));
-        viewHolder.tvCreatedTime.setText(getRelativeTimeAgo(t.getCreatedAt()));
-        viewHolder.tvBody.setText(t.getBody());
+
+        Tweet tweetToshow = t.getRetweetedStatus();
+        if(tweetToshow == null) {
+            tweetToshow = t;
+            viewHolder.tvRetweetBy.setVisibility(View.GONE);
+        } else {
+            viewHolder.tvRetweetBy.setVisibility(View.VISIBLE);
+            viewHolder.tvRetweetBy.setText(String.format(getContext().getResources().getString(R.string.retweeted_by), t.getUser().getName()));
+        }
+
+        viewHolder.tvUserName.setText(tweetToshow.getUser().getName());
+        viewHolder.tvName.setText(String.format("@%s", tweetToshow.getUser().getScreenName()));
+        viewHolder.tvCreatedTime.setText(getRelativeTimeAgo(tweetToshow.getCreatedAt()));
+        viewHolder.tvBody.setText(tweetToshow.getBody());
+        viewHolder.tvRetweet.setText(Integer.toString(tweetToshow.getRetweetCount()));
+        viewHolder.tvFavorite.setText(Integer.toString(tweetToshow.getFavoriteCount()));
+
         viewHolder.ivProfile.setImageResource(android.R.color.transparent);
-        Picasso.with(getContext()).load(t.getUser().getProfileImageUrl()).into(viewHolder.ivProfile);
+        Picasso.with(getContext()).load(tweetToshow.getUser().getProfileImageUrl()).into(viewHolder.ivProfile);
+
+      //  Drawable img = getContext().getResources().getDrawable(
+      //          R.drawable.retweet);
+      //  img.setBounds(0, 0, 20, viewHolder.tvRetweetBy.getMeasuredHeight());
+     //   viewHolder.tvRetweetBy.setCompoundDrawables(img, null, null, null);
         return convertView;
 
     }
