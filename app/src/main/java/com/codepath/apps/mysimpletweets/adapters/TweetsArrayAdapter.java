@@ -1,4 +1,4 @@
-package com.codepath.apps.mysimpletweets;
+package com.codepath.apps.mysimpletweets.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.activities.TimelineActivity;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.squareup.picasso.Picasso;
 
@@ -20,8 +22,10 @@ import java.util.Locale;
  * Created by bass on 2015/8/10.
  */
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
+    private TimelineActivity mParent ;
     public TweetsArrayAdapter(Context context, List<Tweet> tweets) {
         super(context, android.R.layout.simple_list_item_1 ,tweets);
+        mParent = (TimelineActivity)context;
     }
     private static class ViewHolder {
         TextView tvBody;
@@ -71,6 +75,13 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         viewHolder.tvBody.setText(tweetToshow.getBody());
         viewHolder.tvRetweet.setText(Integer.toString(tweetToshow.getRetweetCount()));
         viewHolder.tvFavorite.setText(Integer.toString(tweetToshow.getFavoriteCount()));
+        viewHolder.tvReply.setTag(tweetToshow);
+        viewHolder.tvReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mParent.startPost((Tweet)v.getTag());
+            }
+        });
 
         viewHolder.ivProfile.setImageResource(android.R.color.transparent);
         Picasso.with(getContext()).load(tweetToshow.getUser().getProfileImageUrl()).into(viewHolder.ivProfile);
@@ -100,7 +111,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             } else if(dateDiff > 60000) {
                 relativeDate = Long.toString(dateDiff / 60000) + "m";
             } else {
-                relativeDate = Long.toString(dateDiff / 60000) + "s";
+                relativeDate = "Just Now";
             }
             //relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
             //        System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();

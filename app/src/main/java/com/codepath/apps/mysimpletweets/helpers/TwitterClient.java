@@ -1,7 +1,8 @@
-package com.codepath.apps.mysimpletweets;
+package com.codepath.apps.mysimpletweets.helpers;
 
 import android.content.Context;
 
+import com.codepath.apps.mysimpletweets.R;
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -24,20 +25,24 @@ import org.scribe.builder.api.TwitterApi;
 public class TwitterClient extends OAuthBaseClient {
 	public static final Class<? extends Api> REST_API_CLASS = TwitterApi.class; // Change this
 	public static final String REST_URL = "https://api.twitter.com/1.1/"; // Change this, base API URL
-	public static final String REST_CONSUMER_KEY = "XpyPkSvtBVJ7Oqs0IS9A1lf1z";       // Change this
-	public static final String REST_CONSUMER_SECRET = "CFfuqopxACy5RAbIpci80XAfDEzVXHWchXf3RSwph6AlLuRFh8"; // Change this
+//	public static final String REST_CONSUMER_KEY
+//	public static final String REST_CONSUMER_SECRET
 	public static final String REST_CALLBACK_URL = "oauth://cpsimpletweets"; // Change this (here and in manifest)
 
 	public TwitterClient(Context context) {
-		super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
+
+		super(context, REST_API_CLASS, REST_URL, context.getString(R.string.REST_CONSUMER_KEY), context.getString(R.string.REST_CONSUMER_SECRET), REST_CALLBACK_URL);
 	}
 
 
-	public void getHomeTimeline(AsyncHttpResponseHandler handler, int start, int count){
+	public void getHomeTimeline(AsyncHttpResponseHandler handler, long since_id, long max_id, int count){
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		RequestParams params = new RequestParams();
 		params.put("count", count);
-		params.put("since_id", start);
+		if(since_id > 0)
+		  params.put("since_id", since_id);
+		if(max_id > 0)
+			params.put("max_id", max_id);
 		getClient().get(apiUrl, params, handler);
 
 	}
@@ -46,6 +51,17 @@ public class TwitterClient extends OAuthBaseClient {
 		String apiUrl = getApiUrl("account/verify_credentials.json");
 		RequestParams params = new RequestParams();
 		getClient().get(apiUrl, params, handler);
+
+	}
+
+	public void updateStatuses(AsyncHttpResponseHandler handler, String status, long in_reply_to_status_id){
+		String apiUrl = getApiUrl("statuses/update.json");
+		RequestParams params = new RequestParams();
+		params.add("status", status);
+		if(in_reply_to_status_id > 0) {
+			params.add("in_reply_to_status_id", Long.toString(in_reply_to_status_id));
+		}
+		getClient().post(apiUrl, params, handler);
 
 	}
 

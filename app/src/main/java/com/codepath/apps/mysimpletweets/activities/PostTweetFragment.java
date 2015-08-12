@@ -1,4 +1,4 @@
-package com.codepath.apps.mysimpletweets;
+package com.codepath.apps.mysimpletweets.activities;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -15,43 +15,49 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.squareup.picasso.Picasso;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link NewTweetFragment.OnFragmentInteractionListener} interface
+ * {@link PostTweetFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link NewTweetFragment#newInstance} factory method to
+ * Use the {@link PostTweetFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewTweetFragment extends DialogFragment {
+public class PostTweetFragment extends DialogFragment {
     private User mUser;
+    private Tweet mTweetReply = null;
     private TextView tvStringLen;
     private EditText edtBody;
 
     private OnFragmentInteractionListener mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NewTweetFragment.
-     */
     // TODO: Rename and change types and number of parameters
-    public static NewTweetFragment newInstance(User user) {
-        NewTweetFragment fragment = new NewTweetFragment();
+    public static PostTweetFragment newInstance(User user, Tweet tweetReply) {
+        PostTweetFragment fragment = new PostTweetFragment();
         Bundle args = new Bundle();
         args.putSerializable("user", user);
+        args.putSerializable("tweetReply", tweetReply);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public NewTweetFragment() {
+    public PostTweetFragment() {
         // Required empty public constructor
+    }
+    private String GetDefaultBody() {
+        String ret = "";
+        if(mTweetReply != null) {
+            if(mTweetReply.getRetweetedStatus() != null) {
+                ret = String.format("@%s ", mTweetReply.getRetweetedStatus().getUser().getScreenName());
+            }
+            ret += String.format("@%s ", mTweetReply.getUser().getScreenName());
+        }
+        return ret;
     }
 
     @Override
@@ -59,6 +65,7 @@ public class NewTweetFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mUser = (User)getArguments().getSerializable("user");
+            mTweetReply = (Tweet)getArguments().getSerializable("tweetReply");
         }
 
         setStyle(DialogFragment.STYLE_NO_TITLE,getTheme());
@@ -69,7 +76,7 @@ public class NewTweetFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_new_tweet, container, false);
+        View v = inflater.inflate(R.layout.fragment_post_tweet, container, false);
 
         Button btTweet  = (Button) v.findViewById(R.id.btTweet);
         edtBody  = (EditText) v.findViewById(R.id.etBody);
@@ -79,8 +86,8 @@ public class NewTweetFragment extends DialogFragment {
         ImageView ivProfile  = (ImageView) v.findViewById(R.id.ivProfileImage);
         ImageButton ibBack = (ImageButton) v.findViewById(R.id.ibBack);
 
-        tvUserName.setText(mUser.getScreenName());
-        tvName.setText(String.format("@%s", mUser.getName()));
+        tvUserName.setText(mUser.getName());
+        tvName.setText(String.format("@%s", mUser.getScreenName()));
         Picasso.with(getActivity()).load(mUser.getProfileImageUrl()).into(ivProfile);
 
         edtBody.addTextChangedListener(new TextWatcher() {
@@ -94,6 +101,7 @@ public class NewTweetFragment extends DialogFragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
         });
+        edtBody.append(GetDefaultBody());
         ibBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,7 +113,7 @@ public class NewTweetFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if (mListener != null) {
-                    mListener.onTweetPost(edtBody.getText().toString());
+                    mListener.onTweetPost(edtBody.getText().toString(), mTweetReply);
                 }
                 dismiss();
             }
@@ -144,7 +152,7 @@ public class NewTweetFragment extends DialogFragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onTweetPost(String body);
+        public void onTweetPost(String body, Tweet tweetReply);
     }
 
 }

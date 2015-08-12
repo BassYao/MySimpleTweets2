@@ -2,6 +2,9 @@ package com.codepath.apps.mysimpletweets;
 
 import android.content.Context;
 
+import com.activeandroid.ActiveAndroid;
+import com.codepath.apps.mysimpletweets.helpers.TwitterClient;
+
 /*
  * This is the Android application itself and is used to configure various settings
  * including the image cache in memory and on disk. This also adds a singleton
@@ -18,6 +21,7 @@ public class TwitterApplication extends com.activeandroid.app.Application {
 	public void onCreate() {
 		super.onCreate();
 		TwitterApplication.context = this;
+		ActiveAndroid.initialize(this);
 	}
 
 	public static TwitterClient getRestClient() {

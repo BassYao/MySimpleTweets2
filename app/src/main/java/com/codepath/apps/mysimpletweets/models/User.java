@@ -1,5 +1,9 @@
 package com.codepath.apps.mysimpletweets.models;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -8,10 +12,15 @@ import java.io.Serializable;
 /**
  * Created by bass on 2015/8/10.
  */
-public class User implements Serializable {
+@Table(name = "User")
+public class User extends Model implements Serializable {
+    @Column(name = "name")
     private String name;
+    @Column(name = "uid", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private long uid;
+    @Column(name = "screenName")
     private String screenName;
+    @Column(name = "profileImageUrl")
     private String profileImageUrl;
 
     public static User fromJSON(JSONObject json) {
@@ -24,7 +33,6 @@ public class User implements Serializable {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         return u;
     }
 

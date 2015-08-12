@@ -12,5 +12,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="action_new_tweet">new tweet</string>
     <string name="tweet_hint">What\'s happening?</string>
+    <string name="title_activity_tweet_detail">Tweet Detail</string>
+
+    <string name="hello_world">Hello world!</string>
 
 </resources>

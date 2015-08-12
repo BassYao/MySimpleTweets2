@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:descendantFocusability="blocksDescendants"
-   >
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.codepath.apps.mysimpletweets.activities.TweetDetailActivity">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,14 +18,12 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/ivProfileImage"
-        android:layout_below="@+id/tvRetweetBy"
+
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-
+        android:layout_below="@+id/tvRetweetBy"
         android:layout_margin="5dp"
-
         android:scaleType="fitXY"
-        />
+        android:layout_gravity="left|top" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -36,64 +35,45 @@
         android:layout_toEndOf="@+id/ivProfileImage"
         android:layout_marginRight="5dp"
         android:textColor="@android:color/black"
-/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1m"
-        android:id="@+id/tvCreatedTime"
-        android:gravity="right"
-        android:layout_marginRight="5dp"
+        android:layout_gravity="left|top" />
 
-        android:layout_alignTop="@+id/tvName"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_toRightOf="@+id/tvName"
-        android:layout_toEndOf="@+id/tvName"
-        android:textColor="@android:color/secondary_text_dark"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:minWidth="5dp" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="\@BassYao"
         android:id="@+id/tvName"
-
-        android:layout_toRightOf="@+id/tvUserName"
-        android:layout_toEndOf="@+id/tvUserName"
+        android:layout_marginRight="5dp"
+        android:layout_alignBottom="@+id/ivProfileImage"
+        android:layout_toRightOf="@+id/ivProfileImage"
+        android:layout_toEndOf="@+id/ivProfileImage"
         android:textColor="@android:color/darker_gray"
-        android:textSize="12dp"
 
-        android:layout_alignBottom="@+id/tvUserName"
+        android:layout_below="@+id/tvUserName"
         android:gravity="center_vertical"
-        android:ellipsize="end"
-        android:maxLines="1" />
-
-
+        android:layout_gravity="left|top" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="this is a tweet"
         android:id="@+id/tvBody"
-        android:layout_toRightOf="@+id/ivProfileImage"
-        android:layout_toEndOf="@+id/ivProfileImage"
-        android:layout_below="@+id/tvUserName"
+        android:layout_below="@+id/ivProfileImage"
+        android:layout_alignLeft="@+id/ivProfileImage"
+        android:layout_alignStart="@+id/ivProfileImage"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:autoLink="all"
         android:linksClickable="true"
- />
+/>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/ivProfileImage"
-        android:layout_toEndOf="@+id/ivProfileImage"
         android:id="@+id/llActionTweet"
         android:layout_below="@+id/tvBody"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:layout_marginRight="5dp"
->
+        android:background="@android:drawable/picture_frame"
+        >
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -101,7 +81,6 @@
             android:drawableLeft="@drawable/reply"
             android:layout_weight="1"
             android:drawablePadding="5dp"
-
             />
         <TextView
             android:layout_width="0dp"
@@ -124,5 +103,14 @@
             />
 
     </LinearLayout>
+
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/lvPhotos"
+        android:layout_below="@+id/llActionTweet"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 
 </RelativeLayout>

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:minHeight="500dp"
-    tools:context="com.codepath.apps.mysimpletweets.NewTweetFragment">
+    tools:context="com.codepath.apps.mysimpletweets.activities.PostTweetFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
@@ -43,7 +43,7 @@
             android:text="140"
             android:id="@+id/tvStringLen"
             android:layout_marginRight="5dp"
-            android:textColor="@android:color/tertiary_text_light"
+            android:textColor="#b4ffffff"
             android:gravity="center_vertical|right"
             android:layout_weight="1"
             />
