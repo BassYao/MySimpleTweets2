@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.mysimpletweets.R;
-import com.codepath.apps.mysimpletweets.activities.TimelineActivity;
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.models.User;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -22,12 +22,12 @@ import java.util.Locale;
  * Created by bass on 2015/8/10.
  */
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
-    private TimelineActivity mParent ;
+    private ViewHolder viewHolder;
+    private OnTimeLineItemClickListener mListener = null;
     public TweetsArrayAdapter(Context context, List<Tweet> tweets) {
         super(context, android.R.layout.simple_list_item_1 ,tweets);
-        mParent = (TimelineActivity)context;
     }
-    private static class ViewHolder {
+    private  class ViewHolder {
         TextView tvBody;
         TextView tvUserName;
         TextView tvName;
@@ -42,7 +42,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Tweet t = getItem(position);
-        ViewHolder viewHolder;
+
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet,parent,false);
             viewHolder = new ViewHolder();
@@ -75,15 +75,34 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         viewHolder.tvBody.setText(tweetToshow.getBody());
         viewHolder.tvRetweet.setText(Integer.toString(tweetToshow.getRetweetCount()));
         viewHolder.tvFavorite.setText(Integer.toString(tweetToshow.getFavoriteCount()));
+        viewHolder.tvFavorite.setTag(tweetToshow);
         viewHolder.tvReply.setTag(tweetToshow);
+        viewHolder.ivProfile.setTag(tweetToshow);
         viewHolder.tvReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mParent.startPost((Tweet)v.getTag());
+                mListener.onReplyClick((Tweet) v.getTag());
+            }
+        });
+        viewHolder.ivProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onProfileClick(((Tweet) v.getTag()).getUser());
+            }
+        });
+        viewHolder.ivProfile.setImageResource(android.R.color.transparent);
+        if(tweetToshow.isFavorited()) {
+            viewHolder.tvFavorite.setCompoundDrawablesWithIntrinsicBounds(R.drawable.favorite_on, 0, 0, 0);
+        } else {
+            viewHolder.tvFavorite.setCompoundDrawablesWithIntrinsicBounds(R.drawable.favorite, 0, 0, 0);
+        }
+        viewHolder.tvFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onFavoriteClick(((Tweet) v.getTag()));
             }
         });
 
-        viewHolder.ivProfile.setImageResource(android.R.color.transparent);
         Picasso.with(getContext()).load(tweetToshow.getUser().getProfileImageUrl()).into(viewHolder.ivProfile);
 
       //  Drawable img = getContext().getResources().getDrawable(
@@ -120,5 +139,15 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         }
 
         return relativeDate;
+    }
+
+    public void setOnTimeLineItemClickListener(OnTimeLineItemClickListener listener) {
+        mListener = listener;
+    }
+    public interface OnTimeLineItemClickListener {
+
+        public void onReplyClick(Tweet tweetReply);
+        public void onProfileClick(User u);
+        public void onFavoriteClick(Tweet tweetReply);
     }
 }

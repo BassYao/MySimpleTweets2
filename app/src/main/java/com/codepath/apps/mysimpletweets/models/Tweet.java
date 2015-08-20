@@ -51,9 +51,9 @@ public class Tweet  extends Model implements Serializable {
             tweet.uid  = jsonObject.getLong("id");
 
             tweet.createdAt = jsonObject.getString("created_at");
-            tweet.favoriteCount = jsonObject.getInt("favorite_count");
-            tweet.favorited = jsonObject.getBoolean("favorited");
-            tweet.retweetCount = jsonObject.getInt("retweet_count");
+            if(jsonObject.has("favorite_count"))tweet.favoriteCount = jsonObject.getInt("favorite_count");
+            if(jsonObject.has("favorited")) tweet.favorited = jsonObject.getBoolean("favorited");
+            if(jsonObject.has("retweet_count")) tweet.retweetCount = jsonObject.getInt("retweet_count");
 
             tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
          //   tweet.user.save();
@@ -156,4 +156,11 @@ public class Tweet  extends Model implements Serializable {
 
     }
 
+    public void setFavoriteCount(int favoriteCount) {
+        this.favoriteCount = favoriteCount;
+    }
+
+    public void setFavorited(boolean favorited) {
+        this.favorited = favorited;
+    }
 }

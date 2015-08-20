@@ -23,6 +23,28 @@ public class User extends Model implements Serializable {
     @Column(name = "profileImageUrl")
     private String profileImageUrl;
 
+    public String getProfileBackgroundImageUrl() {
+        return profileBackgroundImageUrl;
+    }
+
+    public int getFollowersCount() {
+        return followersCount;
+    }
+
+    public int getFriendsCount() {
+        return friendsCount;
+    }
+
+    public int getStatusesCount() {
+        return statusesCount;
+    }
+
+    private String profileBackgroundImageUrl = "";
+
+    private int followersCount;
+    private int friendsCount;
+    private int statusesCount;
+
     public static User fromJSON(JSONObject json) {
         User u = new User();
         try {
@@ -30,6 +52,11 @@ public class User extends Model implements Serializable {
             u.uid  = json.getLong("id");
             u.screenName = json.getString("screen_name");
             u.profileImageUrl = json.getString("profile_image_url");
+            u.followersCount  = json.getInt("followers_count");
+            u.friendsCount  = json.getInt("friends_count");
+            u.statusesCount  = json.getInt("statuses_count");
+            if(json.has("profile_banner_url"))
+              u.profileBackgroundImageUrl =  json.getString("profile_banner_url");
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
+    android:background="#ffffff">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:minHeight="180dp"
+        android:id="@+id/ivProfileBackground"
+        android:background="@color/twitter"
+        android:scaleType="centerCrop"/>
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/ivProfileImage"
+
+        android:scaleType="fitXY"
+        android:layout_margin="20dp"
+
+        android:layout_centerHorizontal="true"
+        android:background="#FFFFFF"
+        android:padding="1dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bass"
+        android:id="@+id/tvUserName"
+        android:layout_below="@+id/ivProfileImage"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="5dp"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:shadowColor="@color/twitter"
+        android:shadowRadius="1"
+        android:shadowDx="2"
+        android:shadowDy="2"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="\@BassYao"
+        android:id="@+id/tvName"
+        android:layout_below="@+id/tvUserName"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="5dp"
+        android:textColor="#FFFFFF"
+        android:shadowColor="@color/twitter"
+        android:shadowRadius="1"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="\@BassYao"
+        android:id="@+id/tvDetail"
+        android:layout_below="@+id/tvName"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="5dp"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
+        android:shadowColor="@color/twitter"
+        android:shadowRadius="1"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ivProfileBackground"
+        android:orientation="vertical">
+
+        <com.astuetz.PagerSlidingTabStrip
+            android:id="@+id/tabs"
+            app:pstsShouldExpand="true"
+            app:pstsTextAllCaps="true"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:textColor="@color/twitter"
+            android:background="#ffffff"
+            app:pstsIndicatorColor="@color/twitter_light"
+            app:pstsIndicatorHeight="4dp"
+            >
+        </com.astuetz.PagerSlidingTabStrip>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>
